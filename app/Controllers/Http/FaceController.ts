@@ -8,6 +8,7 @@ import BadRequestException from 'App/Exceptions/BadRequestException'
 import uniqid from 'uniqid'
 import * as UID from 'App/Utils/UID'
 import Face from 'App/Models/Face'
+import Drive from '@ioc:Adonis/Core/Drive'
 
 export default class FaceController {
   public async test({ response }: HttpContextContract) {
@@ -75,10 +76,11 @@ export default class FaceController {
     }
 
     const fileName = nanoid() + '.png'
-    await image.move(Application.tmpPath('uploads/images'), { name: fileName })
-    const filePath = Application.tmpPath('uploads/images') + '/' + fileName
+    await image.moveToDisk('images', { name: fileName })
+    await DataService.cleanupImage(`images/${fileName}`)
+    const buffer = await Drive.get(`images/${fileName}`)
 
-    const tensor = await FaceAPI.detect(filePath)
+    const tensor = await FaceAPI.detect(buffer)
     const result = await FaceAPI.find(tensor.face[0])
     return response.json(result)
   }

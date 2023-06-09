@@ -22,10 +22,16 @@ class DataService {
 
     for (const face of tensor.face) {
       const faceCanvas = await ImageService.createFaceCanvas(canvas, face)
-      const stream = faceCanvas.createPNGStream()
+      const buffer = await ImageService.cleanup(faceCanvas.toBuffer())
       const faceImagePath = `faces/${datasetUid}/${uniqid()}.png`
-      await Drive.putStream(faceImagePath, stream)
+      await Drive.put(faceImagePath, buffer)
     }
+  }
+
+  public async cleanupImage(imagePath: string): Promise<void> {
+    const buffer = await Drive.get(imagePath)
+    const cleaned = await ImageService.cleanup(buffer)
+    return await Drive.put(imagePath, cleaned)
   }
 
   public async getImagePathFromDatasetUid(datasetUid: string): Promise<string[]> {

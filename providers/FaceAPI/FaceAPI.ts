@@ -30,11 +30,16 @@ export default class FaceAPI {
     this.human = new Human(this.config)
   }
 
-  public async detect(imagePath: string): Promise<Result> {
-    const buffer = fs.readFileSync(imagePath)
+  public async detect(input: string | Buffer): Promise<Result> {
+    const buffer = this.getBufferFromInput(input)
     const tensor = this.human.tf.node.decodeImage(buffer)
     const result = await this.human.detect(tensor)
     return result
+  }
+
+  private getBufferFromInput(input: string | Buffer): Buffer {
+    if (_.isBuffer(input)) return input as Buffer
+    return fs.readFileSync(input)
   }
 
   public setFaceData(faceData: FaceData[]): void {

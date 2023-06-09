@@ -2,6 +2,8 @@ import { createCanvas, loadImage, Canvas } from 'canvas'
 import sizeOf from 'image-size'
 import { ISizeCalculationResult } from 'image-size/dist/types/interface'
 import { FaceResult } from '@vladmandic/human'
+import sharp from 'sharp'
+import fs from 'fs'
 
 class ImageService {
   public async createCanvas(
@@ -27,6 +29,10 @@ class ImageService {
     const ctx = faceCanvas.getContext('2d')
     ctx.drawImage(canvas, x, y, width, height, 0, 0, width, height)
     return faceCanvas
+  }
+
+  public async cleanup(stream: any) {
+    return await sharp(stream).gamma().grayscale().toBuffer()
   }
 }
 
