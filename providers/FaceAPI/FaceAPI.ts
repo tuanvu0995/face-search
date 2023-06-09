@@ -14,10 +14,23 @@ export default class FaceAPI {
 
   private config = {
     body: { enabled: false },
+    filter: {
+      enabled: true,
+      equalization: true,
+      width: 0,
+    },
     face: {
       enabled: true,
-      detector: { rotation: true, return: true },
+      detector: {
+        return: true,
+        rotation: true,
+        maxDetected: 50,
+        iouThreshold: 0.01,
+        minConfidence: 0.2,
+      },
       mesh: { enabled: true },
+      iris: { enabled: false },
+      emotion: { enabled: true },
       description: { enabled: true },
     },
     hand: { enabled: false },

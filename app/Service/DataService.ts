@@ -15,10 +15,12 @@ class DataService {
       Logger.info('No faces detected')
     }
 
-    const size = ImageService.getImageDimensions(sourcePath)
-    if (!size.width || !size.height) throw new Error('Invalid image dimensions')
+    const sourceBuffer = await ImageService.getImageBufferFromPath(sourcePath)
 
-    const canvas = await ImageService.createCanvas(sourcePath, size.width, size.height)
+    const { width, height } = await ImageService.getImageMetadata(sourceBuffer)
+    if (!width || !height) throw new Error('Invalid image dimensions')
+
+    const canvas = await ImageService.createCanvas(sourceBuffer, width, height)
 
     for (const face of tensor.face) {
       const faceCanvas = await ImageService.createFaceCanvas(canvas, face)

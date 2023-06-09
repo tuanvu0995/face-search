@@ -22,7 +22,6 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
   Route.get('/', async () => ({ name: 'Face API', version: '1.0.0' }))
-  Route.get('/test', 'FaceController.test')
   Route.post('/train', 'FaceController.train')
   Route.post('/prepare', 'FaceController.prepare')
   Route.post('/recognize', 'FaceController.recognize')

@@ -1,11 +1,13 @@
-import { createCanvas, loadImage, Canvas } from 'canvas'
-import sizeOf from 'image-size'
-import { ISizeCalculationResult } from 'image-size/dist/types/interface'
-import { FaceResult } from '@vladmandic/human'
-import sharp from 'sharp'
 import fs from 'fs'
+import sharp from 'sharp'
+import { createCanvas, loadImage, Canvas } from 'canvas'
+import { FaceResult } from '@vladmandic/human'
 
 class ImageService {
+  public getImageBufferFromPath(path: string): Buffer {
+    return fs.readFileSync(path)
+  }
+
   public async createCanvas(
     buffer: string | Buffer,
     width: number,
@@ -18,9 +20,8 @@ class ImageService {
     return canvas
   }
 
-  public getImageDimensions(buffer: string | Buffer): ISizeCalculationResult {
-    const dimensions = sizeOf(buffer)
-    return dimensions
+  public async getImageMetadata(buffer: Buffer): Promise<sharp.Metadata> {
+    return await sharp(buffer).metadata()
   }
 
   public createFaceCanvas(canvas: Canvas, face: FaceResult): Canvas {
