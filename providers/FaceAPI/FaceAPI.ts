@@ -1,9 +1,9 @@
 import '@tensorflow/tfjs-node'
 import fs from 'fs'
-import * as _ from 'lodash'
+import _ from 'lodash'
 import Human, { FaceResult, Result } from '@vladmandic/human'
+import Env from '@ioc:Adonis/Core/Env'
 import { FaceData } from '@ioc:FaceAPI'
-import Logger from '@ioc:Adonis/Core/Logger'
 import BadRequestException from 'App/Exceptions/BadRequestException'
 
 export default class FaceAPI {
@@ -24,7 +24,7 @@ export default class FaceAPI {
       detector: {
         return: true,
         rotation: true,
-        maxDetected: 50,
+        maxDetected: Env.get('MAX_FACE_DETECTED', 10),
         iouThreshold: 0.01,
         minConfidence: 0.2,
       },
@@ -32,6 +32,7 @@ export default class FaceAPI {
       iris: { enabled: false },
       emotion: { enabled: true },
       description: { enabled: true },
+      maxDetected: 50,
     },
     hand: { enabled: false },
     object: { enabled: false },
@@ -41,6 +42,10 @@ export default class FaceAPI {
 
   constructor() {
     this.human = new Human(this.config)
+  }
+
+  public setFaceData(faceData: FaceData[]): void {
+    this.faces = faceData
   }
 
   public async detect(input: string | Buffer): Promise<Result> {
@@ -53,10 +58,6 @@ export default class FaceAPI {
   private getBufferFromInput(input: string | Buffer): Buffer {
     if (_.isBuffer(input)) return input as Buffer
     return fs.readFileSync(input)
-  }
-
-  public setFaceData(faceData: FaceData[]): void {
-    this.faces = faceData
   }
 
   public find(face: FaceResult) {

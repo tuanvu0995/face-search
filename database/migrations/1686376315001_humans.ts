@@ -1,17 +1,11 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'faces'
+  protected tableName = 'humans'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.bigIncrements('id')
-
-      table.string('uid').notNullable().unique().index()
-      table.string('name').notNullable().index()
-
-      table.text('data').notNullable()
-      table.boolean('is_active').defaultTo(true)
+      table.increments('id')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
@@ -21,7 +15,7 @@ export default class extends BaseSchema {
     })
   }
 
-  public async down() {
+  public async down () {
     this.schema.dropTable(this.tableName)
   }
 }

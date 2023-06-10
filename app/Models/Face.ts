@@ -1,13 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
-import * as UID from 'App/Utils/UID'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Face extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-
-  @column()
-  public uid: string
 
   @column()
   public name: string
@@ -23,9 +19,4 @@ export default class Face extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
-  @beforeCreate()
-  public static generateUid(face: Face) {
-    face.uid = UID.generate()
-  }
 }
