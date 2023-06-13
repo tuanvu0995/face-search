@@ -2,6 +2,7 @@
 ARG NODE_IMAGE=node:18-alpine
 
 FROM $NODE_IMAGE AS base
+RUN apk --update add python3 pkg-config
 RUN apk --no-cache add dumb-init
 RUN mkdir -p /home/node/app && chown node:node /home/node/app
 WORKDIR /home/node/app
