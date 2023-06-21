@@ -1,17 +1,5 @@
 {
   "commands": {
-    "train": {
-      "settings": {
-        "loadApp": false,
-        "stayAlive": false
-      },
-      "commandPath": "./commands/Train",
-      "commandName": "train",
-      "description": "",
-      "args": [],
-      "aliases": [],
-      "flags": []
-    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",
@@ -568,6 +556,30 @@
           "description": "Disable locks acquired to run migrations safely"
         }
       ]
+    },
+    "ai:prepare": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/AiPrepare",
+      "commandName": "ai:prepare",
+      "description": "",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
+    "ai:train": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/AiTrain",
+      "commandName": "ai:train",
+      "description": "",
+      "args": [],
+      "aliases": [],
+      "flags": []
     }
   },
   "aliases": {}

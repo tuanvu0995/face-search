@@ -1,5 +1,4 @@
 import type { ApplicationContract } from '@ioc:Adonis/Core/Application'
-import Database from '@ioc:Adonis/Lucid/Database'
 import FaceAPI from './FaceAPI'
 import _ from 'lodash'
 import { FaceData } from '@ioc:FaceAPI'

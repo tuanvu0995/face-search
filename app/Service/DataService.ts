@@ -30,6 +30,31 @@ class DataService {
     }
   }
 
+  public async prepareImageV2(fileName: string, name: string): Promise<void> {
+    const sourcePath = Application.tmpPath(`uploads/datasets/${name}/${fileName}`)
+
+    const tensor = await FaceAPI.detect(sourcePath)
+    if (_.isNil(tensor)) {
+      Logger.info('No faces detected')
+    }
+
+    const sourceBuffer = await ImageService.getImageBufferFromPath(sourcePath)
+
+    const { width, height } = await ImageService.getImageMetadata(sourceBuffer)
+    if (!width || !height) throw new Error('Invalid image dimensions')
+
+    const canvas = await ImageService.createCanvas(sourceBuffer, width, height)
+    console.log(`Found ${tensor.face.length} faces`)
+
+    for (const face of tensor.face) {
+      const faceCanvas = await ImageService.createFaceCanvas(canvas, face)
+      const buffer = await ImageService.cleanup(faceCanvas.toBuffer())
+      const faceImagePath = `faces/${name}/${uniqid()}.png`
+      console.log(`Saving face to ${faceImagePath}`)
+      await Drive.put(faceImagePath, buffer)
+    }
+  }
+
   public async cleanupImage(imagePath: string): Promise<void> {
     const buffer = await Drive.get(imagePath)
     const cleaned = await ImageService.cleanup(buffer)

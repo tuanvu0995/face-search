@@ -65,11 +65,11 @@ export default class FaceController {
     })
 
     if (!image) {
-      return
+      return response.badRequest('No image found')
     }
 
     if (!image.isValid) {
-      return image.errors
+      return response.status(400).json(image.errors)
     }
 
     const fileName = UID.generate() + '.png'
